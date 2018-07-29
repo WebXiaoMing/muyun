@@ -1,40 +1,103 @@
 <template>
   <transition name="fade">
-    <div class="home">
-      <div class="blog-item" v-for="item in list" :key="item">
+    <div class="home" v-if="blogList.length">
+      <div class="blog-item" v-for="item in blogList" :key="item.pk" @click="showDetail(item)">
         <div class="item-header">
-          <div class="item-title">JS字符串补全方法padStart()和大家我是东方padEnd()简介</div>
+          <div class="item-title">{{ item.fields.title}}</div>
           <div class="tag-list-wrapper">
             <div class="tag-icon"></div>
             <div class="tab-title">标签：</div>
-            <div class="tag-list">
-              <a class="tag-item">javascript</a>
-              <a class="tag-item">vue</a>
-              <a class="tag-item">ES6</a>
+            <div class="tag-list" v-if="tags.length">
+              <a class="tag-item" v-for="tag in _formatTags(item.fields.tags, tags)">{{tag.fields.tag_name}}</a>
             </div>
           </div>
         </div>
-        <div class="blog-text">在JS中，字符串补全是常用操作，以前我们的做法是先检测字符串长度够不够，不够，自己再拼接字符串以到达我们需要的字符串长度。到了ES6，浏览器天然支持字符串长度补全方法，这个方法就是padStart()和padEnd()。乍一看好像很简单，但是，仔细一深入，发现意想不到的细节还挺多的，要不，你进来瞅一瞅？</div>
+        <div class="blog-text">{{ item.fields.short_text}}</div>
         <div class="create-time-wrapper">
           <div class="create-time">
             <div class="time-icon"></div>
-            <div class="time-text">2018年8月26日</div>
+            <div class="time-text">{{ _formatDate(item.fields.add_time) }}</div>
           </div>
           <div class="show-more"></div>
         </div>
       </div>
+      <page-index v-if="pages.length > 1"></page-index>
     </div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
+import { mapMutations } from 'vuex'
+
+import PageIndex from 'components/page-index'
+import { getBlogList, getTagList, ERR_CODE } from 'api/blogApi'
+
 export default {
   data () {
     return {
-      list: [0, 1, 2, 3, 4]
+      page: 1,
+      pageNum: 10,
+      blogList: [],
+      pages: [],
+      tags: [],
     }
   },
+  created () {
+    this._getBlogList()
+    this._getTagList()
+  },
+  methods: {
+    showDetail (item) {
+      this.setCurrBlog({
+        id: item.pk,
+        title: item.fields.title,
+        categories: item.fields.categories,
+        createTime: this._formatDate(item.fields.add_time)
+      })
+      this.$router.push({
+        path: `/detail/${item.pk}`,
+      })
+    },
+    _getBlogList () {
+      getBlogList(this.page, this.pageNum).then((res) => {
+        if (res.data.code === ERR_CODE) {
+          this.blogList = res.data.data
+          this.pages = this._getPages(res.data.num_pages)
+        }
+      })
+    },
+    _getTagList () {
+      getTagList().then(res => {
+        if (res.data.code === ERR_CODE) {
+          this.tags = res.data.data
+        }
+      })
+    },
+    _formatTags (tags, tagList) {
+      let ret = []
+      for (let i = 0, len = tags.length; i < len; i ++) {
+        let index = tagList.findIndex(tag => tag.pk === tags[i])
+        ret.push(tagList[index])
+      }
+      return ret
+    },
+    _formatDate (time) {
+      const date = new Date(time)
+      return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日'
+    },
+    _getPages (pages) {
+      const ret = []
+      for (let i = 1; i < pages; i ++) {
+        ret.push(i)
+      }
+      return ret
+    },
+    ...mapMutations([
+      'setCurrBlog'
+    ])
+  },
   components: {
+    PageIndex
   }
 }
 </script>
@@ -49,7 +112,7 @@ export default {
       border-radius 0.25em
       cursor pointer
       margin-bottom 2em
-      transition all 0.4s ease-in-out
+      transition all 0.5s ease-in-out
       &:hover
         box-shadow 0.5em 0.5em 0.625em #e5ebf0
       .item-header
@@ -70,6 +133,9 @@ export default {
             height 1.5em
             background url("../common/icon/tag_icon.png")no-repeat
             background-size cover
+          .tag-list
+            .tag-item
+              margin-right 0.25em
       .blog-text
         padding 1.5em 2em
         font-size 0.875em

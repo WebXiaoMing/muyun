@@ -3,24 +3,24 @@
     <div class="main">
       <div class="user-container">
         <img src="./avatar.jpg" alt="" class="user-avatar">
-        <div class="user-name">暮云春树</div>
-        <div class="signature">In me the tiger sniffs the rose</div>
+        <div class="user-name">{{userInfo.nick_name}}</div>
+        <div class="signature">{{ userInfo.signature }}</div>
       </div>
       <div class="tab-wrapper">
-        <div class="tab-item">
-          <div class="item-count">180</div>
+        <router-link tag="div" to="/archives" class="tab-item">
+          <div class="item-count">{{ userInfo.archives_counts }}</div>
           <div class="item-title">日志</div>
-        </div>
-        <div class="tab-item">
-          <div class="item-count">8</div>
+        </router-link>
+        <router-link tag="div" to="/categories" class="tab-item">
+          <div class="item-count">{{ userInfo.categories_counts }}</div>
           <div class="item-title">分类</div>
-        </div>
-        <div class="tab-item">
-          <div class="item-count">12</div>
+        </router-link>
+        <router-link tag="div" to="/tags" class="tab-item">
+          <div class="item-count">{{ userInfo.tags_counts }}</div>
           <div class="item-title">标签</div>
-        </div>
+        </router-link>
       </div>
-      <div class="home">首&nbsp;&nbsp;页</div>
+      <router-link tag="div" to="/home" class="home">首&nbsp;&nbsp;页</router-link>
     </div>
     <div class="footer-wrapper">
       <div class="create-time">&copy;2015-2018&nbsp;·&nbsp;暮云春树</div>
@@ -31,6 +31,27 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { getUserInfo, ERR_CODE } from 'api/blogApi'
+
+export default {
+  data () {
+    return {
+      userInfo: {}
+    }
+  },
+  created () {
+    this._getUserInfo()
+  },
+  methods: {
+    _getUserInfo () {
+      getUserInfo('ming_admin').then(res => {
+        if (res.data.code === ERR_CODE) {
+          this.userInfo = res.data.data[0].fields
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -74,6 +95,18 @@
           width 3.5em
           border-right 1px solid #ccc
           cursor pointer
+          position relative
+          &.router-link-active
+            color $theme-color
+            &:after
+              content ''
+              position absolute
+              bottom -0.5em
+              width 2em
+              height 0.25em
+              background $theme-color
+            .item-title
+              color $theme-color
           &:hover
             color $theme-color
             .item-title
