@@ -1,33 +1,50 @@
 <template>
   <transition name="fade">
     <div class="tags">
-      <div class="tags-title">目前共计26个标签</div>
+      <div class="tags-title">目前共计{{tagList.length}}个标签</div>
       <div class="tags-list">
-        <div class="tag">Vue</div>
-        <div class="tag">Django</div>
-        <div class="tag">Python</div>
-        <div class="tag">H5</div>
-        <div class="tag">移动端</div>
-        <div class="tag">小程序</div>
-        <div class="tag">CSS3</div>
-        <div class="tag">外国名著</div>
-        <div class="tag">古典文学</div>
-        <div class="tag">诗词鉴赏</div>
-        <div class="tag">小说</div>
-        <div class="tag">H5</div>
-        <div class="tag">移动端</div>
-        <div class="tag">小程序</div>
-        <div class="tag">CSS3</div>
-        <div class="tag">外国名著</div>
-        <div class="tag">古典文学</div>
-        <div class="tag">诗词鉴赏</div>
-        <div class="tag">小说</div>
+        <div class="tag"
+             v-for="tag in tagList"
+             @click.stop="showTagsList(tag)"
+        >{{tag.fields.tag_name}}
+        </div>
       </div>
     </div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
+import { mapMutations } from 'vuex'
+
+import { getTagList, ERR_CODE } from 'api/blogApi'
+export default {
+  data () {
+    return {
+      tagList: []
+    }
+  },
+  created () {
+    this._getTagList()
+  },
+  methods: {
+    showTagsList (tags) {
+      this.setCurrTags(tags)
+      this.$router.push({
+        path: `/tags/${tags.fields.tag_name}`
+      })
+    },
+    _getTagList () {
+      getTagList().then(res => {
+        if (res.data.code === ERR_CODE) {
+          this.tagList = res.data.data
+        }
+      })
+    },
+    ...mapMutations([
+      'setCurrTags'
+    ])
+  }
+}
 </script>
 
 <style lang="stylus" scoped>

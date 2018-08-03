@@ -27,7 +27,6 @@ export default {
   data () {
     return {
       detail: '',
-      id: sessionStorage.getItem('_curr_blog_id_')
     }
   },
   computed: {
@@ -41,7 +40,7 @@ export default {
   methods: {
     _getBlogDetail () {
       getBlogDetail(this.currBlog.id).then(res => {
-        if (res.data.code === ERR_CODE) {
+        if (res.data.code === ERR_CODE && res.data.data.length) {
           this.detail = res.data.data[0].fields.detail
         }
       })

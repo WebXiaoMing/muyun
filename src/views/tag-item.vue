@@ -3,18 +3,51 @@
     <div class="tag-item-wrapper">
       <div class="title">
         <div class="dot"></div>
-        <div class="title-text">Vue</div>
+        <div class="title-text">{{currTags.fields.tag_name}}</div>
       </div>
-      <blog-list></blog-list>
-      <page-index></page-index>
+      <blog-list :blogList="blogList" @showDetail="showDetail"></blog-list>
+      <page-index v-if="blogList.length > pageNum"></page-index>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import { mapGetters } from 'vuex'
+
 import PageIndex from 'components/page-index'
 import BlogList from 'components/blog-list'
+
+import { getBlogsByTag, ERR_CODE } from 'api/blogApi'
+import { showBlog} from "common/js/mixins"
+
 export default {
+  mixins: [showBlog],
+  data () {
+    return {
+      blogList: [],
+      page: 1,
+      pageNum: 5,
+      pages: []
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'currTags'
+    ])
+  },
+  created () {
+    this._getBlogsByTag()
+  },
+  methods: {
+    _getBlogsByTag () {
+      getBlogsByTag(this.currTags.pk, this.page, this.pageNum).then(res => {
+        if (res.data.code === ERR_CODE) {
+          this.blogList = res.data.data
+          this.pages = this._getPages(res.data.num_pages)
+        }
+      })
+    }
+  },
   components: {
     BlogList,
     PageIndex

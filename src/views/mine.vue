@@ -2,7 +2,7 @@
   <div class="mine">
     <div class="main">
       <div class="user-container">
-        <img src="./avatar.jpg" alt="" class="user-avatar">
+        <img :src="avatar" alt="" class="user-avatar">
         <div class="user-name">{{userInfo.nick_name}}</div>
         <div class="signature">{{ userInfo.signature }}</div>
       </div>
@@ -31,12 +31,18 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { mapMutations, mapGetters } from 'vuex'
+
 import { getUserInfo, ERR_CODE } from 'api/blogApi'
+import defaultAvatar from 'common/icon/avatar.jpeg'
 
 export default {
-  data () {
-    return {
-      userInfo: {}
+  computed: {
+    ...mapGetters([
+      'userInfo'
+    ]),
+    avatar () {
+      return this.userInfo.avatar ? `/media/${this.userInfo.avatar}` : defaultAvatar
     }
   },
   created () {
@@ -44,12 +50,18 @@ export default {
   },
   methods: {
     _getUserInfo () {
+      if (this.userInfo.nick_name) {
+        return
+      }
       getUserInfo('ming_admin').then(res => {
         if (res.data.code === ERR_CODE) {
-          this.userInfo = res.data.data[0].fields
+          this.setUserInfo(res.data.data[0].fields)
         }
       })
-    }
+    },
+    ...mapMutations([
+      'setUserInfo'
+    ])
   }
 }
 </script>

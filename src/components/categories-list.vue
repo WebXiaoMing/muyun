@@ -1,16 +1,53 @@
 <template>
   <transition name="cate">
     <div class="categories-list-wrapper">
-      <blog-list></blog-list>
-      <page-index></page-index>
+      <blog-list :blogList="blogList"></blog-list>
+      <page-index v-if="maxPage > 1"></page-index>
     </div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
+import { mapGetters } from 'vuex'
+
 import PageIndex from 'components/page-index'
 import BlogList from 'components/blog-list'
+
+import { getBlogsByCategories, ERR_CODE } from 'api/blogApi'
 export default {
+  data () {
+    return {
+      page: 1,
+      pageNum: 10,
+      blogList: [],
+      maxPage: null,
+    }
+  },
+  created () {
+    this._getBlogsByCategories()
+  },
+  computed: {
+    ...mapGetters([
+      'currCategories'
+    ])
+  },
+  methods: {
+    _getBlogsByCategories () {
+      getBlogsByCategories(this.currCategories.name, this.page, this.pageNum).then(res => {
+        if (res.data.code === ERR_CODE) {
+          this.blogList = res.data.data
+          this.maxPage = res.data.num_pages
+        }
+      })
+    }
+  },
+  watch: {
+    currCategories (newVal, oldVal) {
+      if (newVal.index !== oldVal.index) {
+        this._getBlogsByCategories()
+      }
+    }
+  },
   components: {
     PageIndex,
     BlogList

@@ -8,7 +8,12 @@
             <div class="tag-icon"></div>
             <div class="tab-title">标签：</div>
             <div class="tag-list" v-if="tags.length">
-              <a class="tag-item" v-for="tag in _formatTags(item.fields.tags, tags)">{{tag.fields.tag_name}}</a>
+              <a class="tag-item"
+                 v-for="tag in _formatTags(item.fields.tags, tags)"
+                 @click.stop="showTagsList(tag)"
+              >
+                {{tag.fields.tag_name}}
+              </a>
             </div>
           </div>
         </div>
@@ -30,9 +35,12 @@
 import { mapMutations } from 'vuex'
 
 import PageIndex from 'components/page-index'
+
 import { getBlogList, getTagList, ERR_CODE } from 'api/blogApi'
+import { showBlog } from 'common/js/mixins'
 
 export default {
+  mixins: [showBlog],
   data () {
     return {
       page: 1,
@@ -47,15 +55,10 @@ export default {
     this._getTagList()
   },
   methods: {
-    showDetail (item) {
-      this.setCurrBlog({
-        id: item.pk,
-        title: item.fields.title,
-        categories: item.fields.categories,
-        createTime: this._formatDate(item.fields.add_time)
-      })
+    showTagsList (tags) {
+      this.setCurrTags(tags)
       this.$router.push({
-        path: `/detail/${item.pk}`,
+        path: `/tags/${tags.fields.tag_name}`
       })
     },
     _getBlogList () {
@@ -81,19 +84,8 @@ export default {
       }
       return ret
     },
-    _formatDate (time) {
-      const date = new Date(time)
-      return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日'
-    },
-    _getPages (pages) {
-      const ret = []
-      for (let i = 1; i < pages; i ++) {
-        ret.push(i)
-      }
-      return ret
-    },
     ...mapMutations([
-      'setCurrBlog'
+      'setCurrTags'
     ])
   },
   components: {

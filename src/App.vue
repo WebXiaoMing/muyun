@@ -8,8 +8,9 @@
     <div class="app-container" ref="appContent">
       <div class="router-wrapper">
         <keep-alive>
-          <router-view></router-view>
+          <router-view v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
       </div>
     </div>
     <div class="home-btn-wrapper">

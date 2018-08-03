@@ -1,39 +1,28 @@
 <template>
   <div class="categories-list">
-    <div class="categories-item">
+    <div class="categories-item" v-for="(item, index) in blogList" @click="showDetail(item)">
       <div class="dot"></div>
-      <div class="item-time">2018-07-18</div>
-      <div class="item-title">centos7下搭建sentry错误日志服务器</div>
-    </div>
-    <div class="categories-item">
-      <div class="dot"></div>
-      <div class="item-time">2018-07-18</div>
-      <div class="item-title">centos7下搭建sentry错误日志服务器</div>
-    </div>
-    <div class="categories-item">
-      <div class="dot"></div>
-      <div class="item-time">2018-07-18</div>
-      <div class="item-title">centos7下搭建sentry错误日志服务器</div>
-    </div>
-    <div class="categories-item">
-      <div class="dot"></div>
-      <div class="item-time">2018-07-18</div>
-      <div class="item-title">centos7下搭建sentry错误日志服务器</div>
-    </div>
-    <div class="categories-item">
-      <div class="dot"></div>
-      <div class="item-time">2018-07-18</div>
-      <div class="item-title">centos7下搭建sentry错误日志服务器</div>
-    </div>
-    <div class="categories-item">
-      <div class="dot"></div>
-      <div class="item-time">2018-07-18</div>
-      <div class="item-title">centos7下搭建sentry错误日志服务器错误日志服务器错误日志服务器错误日志服务器</div>
+      <div class="item-time">{{ item.fields.add_time.substr(0, 10) }}</div>
+      <div class="item-title">{{ item.fields.title }}</div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+
+export default {
+  props: {
+    blogList: {
+      type: Array,
+      default: []
+    }
+  },
+  methods: {
+    showDetail (item) {
+      this.$emit('showDetail', item)
+    }
+  }
+}
 </script>
 
 <style lang="stylus" scoped>

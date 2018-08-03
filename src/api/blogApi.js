@@ -40,3 +40,38 @@ export function getUserInfo (name) {
 export function getTagList () {
   return axios.get(`/api/getTagList`)
 }
+
+
+/**
+ * 获取所有分类
+ * @returns {AxiosPromise<any>}
+ */
+export function getCategories () {
+  return axios.get(`/api/getCategories`)
+}
+
+
+/**
+ * 根据分类名获取博客列表
+ * @param categories 分类名
+ * @param page 当前页数
+ * @param pageNum 每页博客数
+ * @returns {AxiosPromise<any>}
+ */
+export function getBlogsByCategories (categories, page, pageNum) {
+  return axios.get(`/api/getBlogsByCategories?categories=${categories}&page=${page}&pageSize=${pageNum}`)
+}
+
+
+/**
+ * 根据标签名获取博客列表
+ * @param categories 分类名
+ * @param page 当前页数
+ * @param pageNum 每页博客数
+ * @returns {AxiosPromise<any>}
+ */
+export function getBlogsByTag (tag, page, pageNum) {
+  return axios.get(`/api/getBlogsByTag?tag=${tag}&page=${page}&pageSize=${pageNum}`)
+}
+
+
