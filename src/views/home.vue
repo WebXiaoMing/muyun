@@ -17,7 +17,7 @@
             </div>
           </div>
         </div>
-        <div class="blog-text">{{ item.fields.short_text}}</div>
+        <div class="blog-text" v-html="item.fields.short_text"></div>
         <div class="create-time-wrapper">
           <div class="create-time">
             <div class="time-icon"></div>
@@ -47,7 +47,7 @@ export default {
       pageNum: 10,
       blogList: [],
       pages: [],
-      tags: [],
+      tags: []
     }
   },
   created () {

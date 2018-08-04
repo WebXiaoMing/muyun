@@ -25,7 +25,7 @@
     <div class="footer-wrapper">
       <div class="create-time">&copy;2015-2018&nbsp;·&nbsp;暮云春树</div>
       <div class="web-info">Dsigned && Powerd by MuYun</div>
-      <div class="case-nums">粤ICP备0244578554号</div>
+      <div class="case-nums">粤ICP备xxxxxxxx号</div>
     </div>
   </div>
 </template>
@@ -42,7 +42,7 @@ export default {
       'userInfo'
     ]),
     avatar () {
-      return this.userInfo.avatar ? `/media/${this.userInfo.avatar}` : defaultAvatar
+      return this.userInfo.avatar ? `http://47.106.65.246/media/${this.userInfo.avatar}` : defaultAvatar
     }
   },
   created () {

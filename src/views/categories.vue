@@ -12,7 +12,11 @@
             <div class="item-text">{{ item.fields.name}}</div>
             <div class="item-count">{{ item.fields.count }}</div>
           </div>
-          <div class="tab-item" @click.stop="showMoreItem" :class="{'active': currCategories.index > 6}">
+          <div class="tab-item"
+               @click.stop="showMoreItem"
+               :class="{'active': currCategories.index > 6}"
+               v-if="categories.length > 6"
+          >
             <div class="item-text">更多</div>
             <div class="more-box" :class="{'active': showMore}">
                 <div class="more-item"
