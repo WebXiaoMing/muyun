@@ -37,7 +37,14 @@
 
 <script type="text/ecmascript-6">
 import PageIndex from 'components/page-index'
+
+import {getBlogs} from 'common/js/mixins'
+
 export default {
+  mixins: [getBlogs],
+  created () {
+    this._getBlogList()
+  },
   components: {
     PageIndex
   }

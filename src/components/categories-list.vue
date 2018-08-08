@@ -1,7 +1,7 @@
 <template>
   <transition name="cate">
     <div class="categories-list-wrapper">
-      <blog-list :blogList="blogList"></blog-list>
+      <blog-list :blogList="blogList"  @showDetail="showDetail"></blog-list>
       <page-index v-if="maxPage > 1"></page-index>
     </div>
   </transition>
@@ -12,9 +12,11 @@ import { mapGetters } from 'vuex'
 
 import PageIndex from 'components/page-index'
 import BlogList from 'components/blog-list'
+import { showBlog } from 'common/js/mixins'
 
 import { getBlogsByCategories, ERR_CODE } from 'api/blogApi'
 export default {
+  mixins: [showBlog],
   data () {
     return {
       page: 1,

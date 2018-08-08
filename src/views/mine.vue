@@ -23,9 +23,9 @@
       <router-link tag="div" to="/home" class="home">首&nbsp;&nbsp;页</router-link>
     </div>
     <div class="footer-wrapper">
-      <div class="create-time">&copy;2015-2018&nbsp;·&nbsp;暮云春树</div>
+      <div class="create-time">&copy;{{createTime}}&nbsp;·&nbsp;暮云春树</div>
       <div class="web-info">Dsigned && Powerd by MuYun</div>
-      <div class="case-nums">粤ICP备xxxxxxxx号</div>
+      <div class="case-nums">粤ICP备18097498号</div>
     </div>
   </div>
 </template>
@@ -43,6 +43,11 @@ export default {
     ]),
     avatar () {
       return this.userInfo.avatar ? `http://47.106.65.246/media/${this.userInfo.avatar}` : defaultAvatar
+    },
+    createTime () {
+      let createYear = 2018
+      let currentYear = new Date().getFullYear()
+      return currentYear > createYear ? `${createYear}-${currentYear}` : currentYear
     }
   },
   created () {

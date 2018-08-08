@@ -18,7 +18,7 @@ import PageIndex from 'components/page-index'
 import BlogList from 'components/blog-list'
 
 import { getBlogsByTag, ERR_CODE } from 'api/blogApi'
-import { showBlog} from "common/js/mixins"
+import { showBlog } from 'common/js/mixins'
 
 export default {
   mixins: [showBlog],

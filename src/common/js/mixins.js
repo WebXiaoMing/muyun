@@ -1,5 +1,7 @@
 import { mapMutations } from 'vuex'
 
+import { getBlogList, ERR_CODE } from 'api/blogApi'
+
 export const showBlog = {
   methods: {
     showDetail (item) {
@@ -26,7 +28,42 @@ export const showBlog = {
       return ret
     },
     ...mapMutations([
-      'setCurrBlog',
+      'setCurrBlog'
     ])
+  }
+}
+
+export const getBlogs = {
+  data () {
+    return {
+      page: 1,
+      pageNum: 10,
+      blogList: [],
+      pages: []
+    }
+  },
+  methods: {
+    _getBlogList () {
+      getBlogList(this.page, this.pageNum).then((res) => {
+        if (res.data.code === ERR_CODE) {
+          this.blogList = res.data.data
+          this.pages = this._getPages(res.data.num_pages)
+        }
+      })
+    },
+    _getPages (pages) {
+      let ret = []
+      if (pages > 8) {
+        for (let i = 1; i < 5; i ++) {
+          ret.push(i)
+        }
+        ret.push("...")
+        ret.push(pages)
+      } else {
+        for (let i = 1; i <= pages; i ++) {
+          ret.push(i)
+        }
+      }
+    }
   }
 }

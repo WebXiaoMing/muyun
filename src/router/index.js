@@ -16,13 +16,17 @@ export default new Router({
     {
       path: '/',
       redirect: '/home',
-      keepAlive: true,
+      meta: {
+        keepAlive: true
+      },
       component: Home
     },
     {
       path: '/home',
       name: 'home',
-      keepAlive: true,
+      meta: {
+        keepAlive: true
+      },
       component: Home
     },
     {
@@ -33,7 +37,9 @@ export default new Router({
     {
       path: '/archives',
       name: 'archives',
-      keepAlive: true,
+      meta: {
+        keepAlive: true
+      },
       component: Archives
     },
     {
@@ -44,7 +50,9 @@ export default new Router({
         {
           path: '/categories/:name',
           name: 'categories-item',
-          props: true,
+          meta: {
+            keepAlive: true
+          },
           component: CategoriesList
         }
       ]
@@ -52,7 +60,9 @@ export default new Router({
     {
       path: '/tags',
       name: 'tags',
-      keepAlive: true,
+      meta: {
+        keepAlive: true
+      },
       component: Tags
     },
     {

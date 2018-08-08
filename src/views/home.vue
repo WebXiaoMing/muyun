@@ -36,17 +36,13 @@ import { mapMutations } from 'vuex'
 
 import PageIndex from 'components/page-index'
 
-import { getBlogList, getTagList, ERR_CODE } from 'api/blogApi'
-import { showBlog } from 'common/js/mixins'
+import { getTagList, ERR_CODE } from 'api/blogApi'
+import { showBlog, getBlogs } from 'common/js/mixins'
 
 export default {
-  mixins: [showBlog],
+  mixins: [showBlog, getBlogs],
   data () {
     return {
-      page: 1,
-      pageNum: 10,
-      blogList: [],
-      pages: [],
       tags: []
     }
   },
@@ -59,14 +55,6 @@ export default {
       this.setCurrTags(tags)
       this.$router.push({
         path: `/tags/${tags.fields.tag_name}`
-      })
-    },
-    _getBlogList () {
-      getBlogList(this.page, this.pageNum).then((res) => {
-        if (res.data.code === ERR_CODE) {
-          this.blogList = res.data.data
-          this.pages = this._getPages(res.data.num_pages)
-        }
       })
     },
     _getTagList () {
