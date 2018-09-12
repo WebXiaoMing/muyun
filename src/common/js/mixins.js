@@ -64,6 +64,7 @@ export const getBlogs = {
           ret.push(i)
         }
       }
+      return ret
     }
   }
 }

@@ -14,7 +14,7 @@
       </div>
     </header>
     <main class="detail-info-wrapper">
-      <div class="detail-info" v-html="detail"></div>
+      <div class="detail-info" v-html="detail" v-highlight></div>
     </main>
   </div>
 </template>
@@ -23,6 +23,7 @@
 import { mapGetters } from 'vuex'
 
 import { getBlogDetail, ERR_CODE } from 'api/blogApi'
+
 export default {
   data () {
     return {
@@ -36,6 +37,8 @@ export default {
   },
   created () {
     this._getBlogDetail()
+  },
+  mounted () {
   },
   methods: {
     _getBlogDetail () {

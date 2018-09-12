@@ -42,7 +42,7 @@ export default {
       'userInfo'
     ]),
     avatar () {
-      return this.userInfo.avatar ? `http://47.106.65.246/media/${this.userInfo.avatar}` : defaultAvatar
+      return this.userInfo.avatar ? `https://www.mychunshu.com/media/${this.userInfo.avatar}` : defaultAvatar
     },
     createTime () {
       let createYear = 2018
